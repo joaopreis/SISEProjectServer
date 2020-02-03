@@ -9,6 +9,8 @@ public class ClaimDataStore {
     //Claim id
     private AtomicInteger uuid;
     private ConcurrentHashMap<Integer,Claim> dataStore;
+    private InsuredDataStore insured=new InsuredDataStore();
+    private EmployeeDataStrore employee=new EmployeeDataStrore();
 
     public ClaimDataStore(){
         uuid=new AtomicInteger(1);
@@ -16,8 +18,8 @@ public class ClaimDataStore {
 
     }
 
-    public synchronized void createClaim(String description){
-        Claim claim=new Claim(uuid.getAndIncrement(),description);
+    public synchronized void createClaim(String description, int userId) throws Exception {
+        Claim claim=new Claim(uuid.getAndIncrement(),description,userId);
         dataStore.put(claim.getUuid(),claim);
         notifyAll();
     }
@@ -26,7 +28,7 @@ public class ClaimDataStore {
         return dataStore.get(i);
     }
 
-    public synchronized void addDocToClaim(int i,String fileName, String content) {
+    public synchronized void addDocToClaim(int i,String fileName, String content, int userId) throws Exception {
         while (!dataStore.containsKey(i)){
             try{wait();}
             catch (InterruptedException e){
@@ -34,25 +36,20 @@ public class ClaimDataStore {
             }
         }
         Claim claim = dataStore.get(i);
-        claim.addDocument(fileName,content);
+        claim.addDocument(fileName,content,userId);
 
     }
 
-    public void removeClaim(int i){
-        dataStore.remove(i);
+    public String getDocumentsByClaim(int i){
+        Claim claim=dataStore.get(i);
+        String docs=claim.returnDocuments();
+        return docs;
     }
 
     public void updateClaim(int i,Claim claim){
         dataStore.replace(i,claim);
     }
 
-    public boolean containsKey(int i){
-        return dataStore.containsKey(i);
-    }
-
-    private void increment(){
-        uuid.incrementAndGet();
-    }
 
     public int size(){
         return dataStore.size();

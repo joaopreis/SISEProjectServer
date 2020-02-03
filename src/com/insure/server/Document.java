@@ -26,12 +26,19 @@ public class Document {
     private String fileName;
     private Timestamp timestamp;
 
+    private int userId;
 
-    public Document(int i, String fileName, String content){
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public Document(int i, String fileName, String content, int userId){
         this.did=i;
         this.fileName=fileName;
         this.content=content;
         this.timestamp=new Timestamp(System.currentTimeMillis());
+        this.userId=userId;
     }
 
     @Override
@@ -41,6 +48,7 @@ public class Document {
                 ", content='" + content + '\'' +
                 ", fileName='" + fileName + '\'' +
                 ", timestamp=" + timestamp +
+                ", userId=" + userId +
                 '}';
     }
 }
