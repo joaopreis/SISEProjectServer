@@ -2,7 +2,7 @@ package com.insure.server;
 
 import java.util.HashSet;
 
-public class EmployeeDataStrore {
+public class EmployeeDataStore {
 
     public  static HashSet<Integer> EMPLOYEES;
 
@@ -10,7 +10,7 @@ public class EmployeeDataStrore {
         return EMPLOYEES;
     }
 
-    public EmployeeDataStrore() {
+    public EmployeeDataStore() {
         EMPLOYEES = new HashSet<Integer>();
         EMPLOYEES.add(1);
         EMPLOYEES.add(2);

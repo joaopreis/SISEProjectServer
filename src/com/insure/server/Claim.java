@@ -25,7 +25,7 @@ public class Claim {
     }
 
     public void addDocument(String fileName, String content, int userId) throws Exception {
-        if (EmployeeDataStrore.EMPLOYEES.contains(userId) || userId==this.userId) {
+        if (EmployeeDataStore.EMPLOYEES.contains(userId) || userId==this.userId) {
             Document document = new Document(did.getAndIncrement(), fileName, content, userId);
             documents.put(document.getDid(), document);
         }else{
@@ -53,12 +53,12 @@ public class Claim {
     public String toString() {
         return "Claim{" +
                 "uuid=" + uuid +
-                ", did=" + did +
                 ", description='" + description + '\'' +
                 ", documents=" + documents +
                 ", userId=" + userId +
                 '}';
     }
+
 
     public String returnDocuments(){
         String doc="";
