@@ -26,7 +26,6 @@ public class ClaimDataStore {
     public synchronized int createClaim(String description, int userId) throws Exception {
         Claim claim=new Claim(uuid.getAndIncrement(),description,userId);
         dataStore.put(claim.getUuid(),claim);
-        notifyAll();
         return claim.getUuid();
     }
 
@@ -39,14 +38,12 @@ public class ClaimDataStore {
     }
 
     public synchronized void addDocToClaim(int i,String fileName, String content, int userId) throws Exception {
-        while (!dataStore.containsKey(i)){
-            try{wait();}
-            catch (InterruptedException e){
-
-            }
+        if (!dataStore.containsKey(i)){
+            throw new Exception("Claim does not exist");
+        }else {
+            Claim claim = dataStore.get(i);
+            claim.addDocument(fileName, content, userId);
         }
-        Claim claim = dataStore.get(i);
-        claim.addDocument(fileName,content,userId);
 
     }
 

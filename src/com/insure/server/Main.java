@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class Main {
 
-    public static final int NUM_ITER = 20000;
+    public static final int NUM_ITER = 10000;
     public static final int NUM_ELE = 50;
 
     static class MyThread extends java.lang.Thread {
@@ -51,30 +51,37 @@ public class Main {
         ClaimDataStore insure = new ClaimDataStore();
         Endpoint.publish("http://localhost:8090/docstorage", insure);
 
-        //ClaimDataStore DB = new ClaimDataStore();
+        ClaimDataStore DB = new ClaimDataStore();
 //
-       // Thread a = new MyThread(DB);
-       // Thread b = new MyThread(DB);
+       Thread a = new MyThread(DB);
+       Thread b = new MyThread(DB);
+       Thread c= new MyThread(DB);
+       Thread d=new MyThread(DB);
 //
-       // a.start();
-       // b.start();
+       a.start();
+       b.start();
+       c.start();
+       d.start();
 //
-       // a.join();
-       // b.join();
+       a.join();
+       b.join();
+       c.join();
+       d.join();
+
 //
-       // // sum the elements in the map
-       // for (int i = 1; i <= DB.size(); i++) {
-       //    Claim el = DB.getClaim(i);
-       //    System.out.println(el.toString());
-       // for (int j = 1; j <= el.size(); j++) {
-       //     Document doc = el.getDocument(j);
-       //     System.out.println(doc.toString());
-       // }
+       // sum the elements in the map
+       for (int i = 1; i <= DB.size(); i++) {
+           Claim el = DB.getClaim(i);
+           System.out.println(el.toString());
+       for (int j = 1; j <= el.size(); j++) {
+            Document doc = el.getDocument(j);
+            System.out.println(doc.toString());
+       }
 //
-       //     System.out.println(el.size());
-       //     System.out.println(DB.size());
+            System.out.println(el.size());
+            System.out.println(DB.size());
 //
-       // }
+       }
     }
 
 

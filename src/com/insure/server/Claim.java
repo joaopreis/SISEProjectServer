@@ -6,10 +6,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Claim {
 
     private final int uuid;
-    private AtomicInteger did;
+
+    public int getDid() {
+        return did.intValue();
+    }
+
+    public AtomicInteger did;
     private String description;
     private HashMap<Integer,Document> documents;
     private int userId;
+
+    public void increment(){
+        did.incrementAndGet();
+    }
 
 
     public Claim(int id, String description, int userId) throws Exception {
@@ -26,7 +35,7 @@ public class Claim {
 
     public void addDocument(String fileName, String content, int userId) throws Exception {
         if (EmployeeDataStore.EMPLOYEES.contains(userId) || userId==this.userId) {
-            Document document = new Document(did.getAndIncrement(), fileName, content, userId);
+            Document document = new Document(this,fileName, content, userId);
             documents.put(document.getDid(), document);
         }else{
             throw new Exception("User "+userId+" does not have access to this claim");

@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 public class Document {
 
     private final int did;
+
     private String content;
 
     public int getDid() {
@@ -33,12 +34,13 @@ public class Document {
         return userId;
     }
 
-    public Document(int i, String fileName, String content, int userId){
-        this.did=i;
+    public Document(Claim claim,String fileName, String content, int userId){
+        this.did= claim.getDid();
         this.fileName=fileName;
         this.content=content;
         this.timestamp=new Timestamp(System.currentTimeMillis());
         this.userId=userId;
+        claim.increment();
     }
 
     @Override
