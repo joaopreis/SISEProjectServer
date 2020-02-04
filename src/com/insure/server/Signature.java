@@ -8,7 +8,6 @@ import java.security.PublicKey;
 import java.util.Base64;
 
 public class Signature {
-
     private String message;
     private String hash;
     private String encryptedHash;
@@ -78,3 +77,4 @@ public class Signature {
 
     }
 }
+
