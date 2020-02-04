@@ -24,9 +24,18 @@ public class ClaimDataStore {
     }
 
     public synchronized int createClaim(String description, int userId) throws Exception {
-        Claim claim=new Claim(uuid.getAndIncrement(),description,userId);
-        dataStore.put(claim.getUuid(),claim);
-        return claim.getUuid();
+        if (claimValidation (userId)) {
+            Claim claim = new Claim(uuid.getAndIncrement(), description, userId);
+            dataStore.put(claim.getUuid(), claim);
+            return claim.getUuid();
+        }else{
+            throw new Exception("The user can't create a claim.");
+        }
+    }
+
+    public boolean claimValidation(int userId){
+        return InsuredDataStore.INSURED.contains(userId);
+
     }
 
     public Claim getClaim(int i){
@@ -38,13 +47,22 @@ public class ClaimDataStore {
     }
 
     public synchronized void addDocToClaim(int i,String fileName, String content, int userId) throws Exception {
-        if (!dataStore.containsKey(i)){
+        if (!claimExistance(i)){
             throw new Exception("Claim does not exist");
-        }else {
+        }else if (docValidation(userId,i)){
             Claim claim = dataStore.get(i);
             claim.addDocument(fileName, content, userId);
+        }else{
+            throw  new Exception("Can't create the document");
         }
 
+    }
+    public boolean docValidation(int userId, int claimId){
+        return (EmployeeDataStore.EMPLOYEES.contains(userId) || userId==dataStore.get(claimId).getUserId());
+    }
+
+    public boolean claimExistance(int i){
+        return dataStore.containsKey(i);
     }
 
     public String getDocumentsByClaim(int i){

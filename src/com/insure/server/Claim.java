@@ -14,6 +14,11 @@ public class Claim {
     public AtomicInteger did;
     private String description;
     private HashMap<Integer,Document> documents;
+
+    public int getUserId() {
+        return userId;
+    }
+
     private int userId;
 
     public void increment(){
@@ -22,24 +27,17 @@ public class Claim {
 
 
     public Claim(int id, String description, int userId) throws Exception {
-        if (InsuredDataStore.INSURED.contains(userId)) {
             this.uuid = id;
             this.description = description;
             this.userId = userId;
             did = new AtomicInteger(1);
             documents = new HashMap<Integer, Document>();
-        }else{
-            throw new Exception("User "+userId+" is not an insured person");
-        }
     }
 
+
     public void addDocument(String fileName, String content, int userId) throws Exception {
-        if (EmployeeDataStore.EMPLOYEES.contains(userId) || userId==this.userId) {
             Document document = new Document(this,fileName, content, userId);
             documents.put(document.getDid(), document);
-        }else{
-            throw new Exception("User "+userId+" does not have access to this claim");
-        }
     }
 
     public int size(){
