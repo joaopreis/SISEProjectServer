@@ -35,8 +35,8 @@ public class Claim {
     }
 
 
-    public void addDocument(String fileName, String content, int userId) throws Exception {
-            Document document = new Document(this,fileName, content, userId);
+    public void addDocument(String docName, String content, int userId, String fileName) throws Exception {
+            Document document = new Document(this,docName, content, userId, fileName);
             documents.put(document.getDid(), document);
     }
 
