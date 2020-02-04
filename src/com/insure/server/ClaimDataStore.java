@@ -46,12 +46,12 @@ public class ClaimDataStore {
         return dataStore.get(i).toString();
     }
 
-    public synchronized void addDocToClaim(int i,String fileName, String content, int userId) throws Exception {
+    public synchronized void addDocToClaim(int i,String docName, String content, int userId, String fileName) throws Exception {
         if (!claimExistance(i)){
             throw new Exception("Claim does not exist");
         }else if (docValidation(userId,i)){
             Claim claim = dataStore.get(i);
-            claim.addDocument(fileName, content, userId);
+            claim.addDocument(docName, content, userId,fileName);
         }else{
             throw  new Exception("Can't create the document");
         }

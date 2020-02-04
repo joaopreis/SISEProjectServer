@@ -29,18 +29,21 @@ public class Document {
 
     private int userId;
 
+    private Signature signature;
+
 
     public int getUserId() {
         return userId;
     }
 
-    public Document(Claim claim,String fileName, String content, int userId){
+    public Document(Claim claim,String docName, String content, int userId, String fileName) throws Exception {
         this.did= claim.getDid();
-        this.fileName=fileName;
+        this.fileName=docName;
         this.content=content;
         this.timestamp=new Timestamp(System.currentTimeMillis());
         this.userId=userId;
         claim.increment();
+        this.signature=new Signature(content,fileName);
     }
 
     @Override
