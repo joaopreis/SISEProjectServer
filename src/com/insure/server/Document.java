@@ -9,6 +9,7 @@ public class Document {
     private String content;
 
     public int getDid() {
+
         return did;
     }
 
