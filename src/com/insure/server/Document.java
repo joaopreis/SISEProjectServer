@@ -5,12 +5,18 @@ import java.sql.Timestamp;
 public class Document {
 
     private final int did;
-
     private String content;
+    private String fileName;
+    private Timestamp timestamp;
+    private int userId;
+    private String signature;
 
     public int getDid() {
-
         return did;
+    }
+
+    public String getSignature() {
+        return signature;
     }
 
     public String getContent() {
@@ -25,26 +31,19 @@ public class Document {
         return timestamp;
     }
 
-    private String fileName;
-    private Timestamp timestamp;
-
-    private int userId;
-
-    private Signature signature;
-
-
     public int getUserId() {
         return userId;
     }
 
-    public Document(Claim claim,String docName, String content, int userId, String fileName) throws Exception {
+    public Document(Claim claim,String docName, String content, int userId,String signature) throws Exception {
         this.did= claim.getDid();
+        this.signature=signature;
         this.fileName=docName;
         this.content=content;
         this.timestamp=new Timestamp(System.currentTimeMillis());
         this.userId=userId;
         claim.increment();
-        this.signature=new Signature(content,fileName);
+
     }
 
     @Override

@@ -7,11 +7,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 @WebService
 public class ClaimDataStore {
 
-    public int getUuid() {
-        return uuid.intValue();
-    }
-
-    //Claim id
     private AtomicInteger uuid;
     private ConcurrentHashMap<Integer,Claim> dataStore;
     private InsuredDataStore insured=new InsuredDataStore();
@@ -20,7 +15,10 @@ public class ClaimDataStore {
     public ClaimDataStore(){
         uuid=new AtomicInteger(1);
         dataStore=new ConcurrentHashMap<Integer, Claim>();
+    }
 
+    public int getUuid() {
+        return uuid.intValue();
     }
 
     public synchronized int createClaim(String description, int userId) throws Exception {
@@ -46,23 +44,37 @@ public class ClaimDataStore {
         return dataStore.get(i).toString();
     }
 
-    public synchronized void addDocToClaim(int i,String docName, String content, int userId, String fileName) throws Exception {
-        if (!claimExistance(i)){
+    public synchronized void addDocToClaim(int i,String docName, String content, int userId,String signature) throws Exception {
+        if (!claimExistence(i)){
             throw new Exception("Claim does not exist");
-        }else if (docValidation(userId,i)){
-            Claim claim = dataStore.get(i);
-            claim.addDocument(docName, content, userId,fileName);
+        }else if (userValidation(userId,i)){
+            if(signatureValidation(content,signature,userId)) {
+                Claim claim = dataStore.get(i);
+                claim.addDocument(docName, content, userId, signature);
+            }else{
+                throw new Exception("Invalid signature: Document has been tampered");
+            }
         }else{
-            throw  new Exception("Can't create the document");
+            throw  new Exception("Invalid UserId:Can't create the document");
         }
-
-    }
-    public boolean docValidation(int userId, int claimId){
-        return (EmployeeDataStore.EMPLOYEES.contains(userId) || userId==dataStore.get(claimId).getUserId());
     }
 
-    public boolean claimExistance(int i){
+    public boolean claimExistence(int i){
         return dataStore.containsKey(i);
+    }
+
+    public boolean signatureValidation(String content,String signature, int userId) throws Exception {
+        String pathpublickey="keys\\server\\user"+userId+"PublicKey";
+        Signature desencriptar=new Signature(signature);
+        Signature encriptar=new Signature(content);
+
+        String desencrypt=desencriptar.desencriptarMessage(pathpublickey,signature);
+        String hashing=encriptar.makeHash(content);
+        return hashing.equals(desencrypt);
+    }
+
+    public boolean userValidation(int userId, int claimId){
+        return (EmployeeDataStore.EMPLOYEES.contains(userId) || userId==dataStore.get(claimId).getUserId());
     }
 
     public String getDocumentsByClaim(int i){
@@ -71,12 +83,36 @@ public class ClaimDataStore {
         return docs;
     }
 
-    public void updateClaim(int i,Claim claim){
-        dataStore.replace(i,claim);
-    }
-
 
     public int size(){
         return dataStore.size();
     }
+
+    public int getClaimSize(int cid){
+        Claim claim=getClaim(cid);
+        return claim.size();
+    }
+
+    public Document getDocumentbyId(int cid,int did){
+        Claim claim=getClaim(cid);
+        return claim.getDocument(did);
+    }
+
+    public int getDocUserId(int cid,int did){
+        Document doc=getDocumentbyId(cid,did);
+        return doc.getUserId();
+    }
+
+    public String getDocSignature(int cid,int did){
+        Document doc=getDocumentbyId(cid,did);
+        return doc.getSignature();
+    }
+
+    public String getDocContent(int cid,int did){
+        Document doc=getDocumentbyId(cid,did);
+        return doc.getContent();
+    }
+
+
+
 }

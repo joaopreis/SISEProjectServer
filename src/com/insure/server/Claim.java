@@ -13,6 +13,8 @@ public class Claim {
 
     public AtomicInteger did;
     private String description;
+
+
     private HashMap<Integer,Document> documents;
 
     public int getUserId() {
@@ -35,10 +37,14 @@ public class Claim {
     }
 
 
-    public void addDocument(String docName, String content, int userId, String fileName) throws Exception {
-            Document document = new Document(this,docName, content, userId, fileName);
+    public void addDocument(String docName, String content, int userId,String assinatura) throws Exception {
+
+            Document document = new Document(this, docName, content, userId,assinatura);
             documents.put(document.getDid(), document);
+
     }
+    //////////////////////////////////////////////////////////////////77777
+
 
     public int size(){
         return documents.size();
