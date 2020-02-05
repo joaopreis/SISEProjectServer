@@ -11,6 +11,10 @@ public class Document {
     private int userId;
     private String signature;
 
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public int getDid() {
         return did;
     }
@@ -54,6 +58,13 @@ public class Document {
                 ", fileName='" + fileName + '\'' +
                 ", timestamp=" + timestamp +
                 ", userId=" + userId +
+                '}';
+    }
+
+    public String toString2(){
+        return "Document{" +
+                "did=" + did +
+                ", fileName='" + fileName + '\'' +
                 '}';
     }
 }

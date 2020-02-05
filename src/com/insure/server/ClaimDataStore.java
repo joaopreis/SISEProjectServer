@@ -7,18 +7,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 @WebService
 public class ClaimDataStore {
 
+    //Claim identifier
     private AtomicInteger uuid;
+
+    //Data Structure to store the claims
     private ConcurrentHashMap<Integer,Claim> dataStore;
+
+    //Class used to store insured clients
     private InsuredDataStore insured=new InsuredDataStore();
+
+    //Class used to store insure employees
     private EmployeeDataStore employee=new EmployeeDataStore();
 
     public ClaimDataStore(){
         uuid=new AtomicInteger(1);
         dataStore=new ConcurrentHashMap<Integer, Claim>();
-    }
-
-    public int getUuid() {
-        return uuid.intValue();
     }
 
     public synchronized int createClaim(String description, int userId) throws Exception {
@@ -27,10 +30,11 @@ public class ClaimDataStore {
             dataStore.put(claim.getUuid(), claim);
             return claim.getUuid();
         }else{
-            throw new Exception("The user can't create a claim.");
+            throw new Exception("This user can not create a claim.");
         }
     }
 
+    //Validates if the user creating the claim is an insured client
     public boolean claimValidation(int userId){
         return InsuredDataStore.INSURED.contains(userId);
 
@@ -59,6 +63,7 @@ public class ClaimDataStore {
         }
     }
 
+    //Validates the claim existence
     public boolean claimExistence(int i){
         return dataStore.containsKey(i);
     }
@@ -73,6 +78,7 @@ public class ClaimDataStore {
         return hashing.equals(desencrypt);
     }
 
+    //Validates if the user adding a document is a employee or the claim creator
     public boolean userValidation(int userId, int claimId){
         return (EmployeeDataStore.EMPLOYEES.contains(userId) || userId==dataStore.get(claimId).getUserId());
     }
@@ -81,6 +87,12 @@ public class ClaimDataStore {
         Claim claim=dataStore.get(i);
         String docs=claim.returnDocuments();
         return docs;
+    }
+
+    public String readDocument(int cid,int did){
+        Claim claim=getClaim(cid);
+        Document doc =claim.getDocument(did);
+        return doc.toString();
     }
 
 
@@ -111,6 +123,11 @@ public class ClaimDataStore {
     public String getDocContent(int cid,int did){
         Document doc=getDocumentbyId(cid,did);
         return doc.getContent();
+    }
+
+    public void updateDocument(int cid, int did,String content){
+        Document doc=getDocumentbyId(cid,did);
+        doc.setContent(content);
     }
 
 

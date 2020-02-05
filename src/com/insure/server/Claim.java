@@ -76,7 +76,7 @@ public class Claim {
     public String returnDocuments(){
         String doc="";
         for (int i=1;i<=this.size();i++){
-            doc=doc+ documents.get(i).toString()+"\n";
+            doc=doc+ documents.get(i).toString2()+"\n";
         }
         return doc;
     }
