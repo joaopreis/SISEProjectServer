@@ -31,7 +31,7 @@ public class Main {
 
                 Claim claim = db.getClaim(j);
                 try {
-                    //db.addDocToClaim(j, "Teste", "Novo doc", 7);
+                    db.addDocToClaim(j, "Teste", "Novo doc", 7);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
