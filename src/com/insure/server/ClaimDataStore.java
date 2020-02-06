@@ -189,6 +189,10 @@ public class ClaimDataStore {
         return employee.getEMPLOYEES().contains(userId);
     }
 
+    public boolean isInsured(int userId){
+        return insured.getINSURED().contains(userId);
+    }
+
 
 
 }
