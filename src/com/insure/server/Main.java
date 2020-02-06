@@ -35,9 +35,9 @@ public class Main {
     public static void main(String args[]) throws Exception {
 
 
-        //System.out.println("Project template - server");
-        //ClaimDataStore insure = new ClaimDataStore();
-        //Endpoint.publish("http://localhost:8090/docstorage", insure);
+        System.out.println("Project template - server");
+        ClaimDataStore insure = new ClaimDataStore();
+        Endpoint.publish("http://localhost:8090/docstorage", insure);
 
         ClaimDataStore DB = new ClaimDataStore();
 

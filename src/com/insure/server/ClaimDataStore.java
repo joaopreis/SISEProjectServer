@@ -48,17 +48,24 @@ public class ClaimDataStore {
         return dataStore.get(i);
     }
 
-    public String claimToString(int i){
-        return dataStore.get(i).toString();
+    public String claimToString(int cid,int userId) throws Exception {
+        if (!claimExistence(cid)){
+            throw new Exception("Claim does not exist");
+        }
+        if (userValidation(userId,cid)){
+            return dataStore.get(cid).toString();
+        }else{
+            throw new Exception ("You do not have clearance for this claim");
+        }
     }
 
     //Add a document to a claim
-    public synchronized void addDocToClaim(int i,String docName, String content, int userId,String signature) throws Exception {
-        if (!claimExistence(i)){
+    public synchronized void addDocToClaim(int cid,String docName, String content, int userId,String signature) throws Exception {
+        if (!claimExistence(cid)){
             throw new Exception("Claim does not exist");
-        }else if (userValidation(userId,i)){
+        }else if (userValidation(userId,cid)){
             if(signatureValidation(content,signature,userId)) {
-                Claim claim = dataStore.get(i);
+                Claim claim = dataStore.get(cid);
                 claim.addDocument(docName, content, userId, signature);
             }else{
                 throw new Exception("Invalid signature: Document has been tampered");
@@ -106,17 +113,34 @@ public class ClaimDataStore {
         return (EmployeeDataStore.EMPLOYEES.contains(userId) || userId==dataStore.get(claimId).getUserId());
     }
 
-    public String getDocumentsByClaim(int i){
+    public String getDocumentsByClaim(int i) throws Exception {
+        if (!claimExistence(i)){
+            throw new Exception ("Claim does not exist");
+        }
         Claim claim=dataStore.get(i);
         String docs=claim.returnDocuments();
         return docs;
     }
 
     //Returns a string of a specific document of a specific claim
-    public String readDocument(int cid,int did){
+    public String readDocument(int cid,int did,int userId) throws Exception {
+        if (!claimExistence(cid)){
+            throw new Exception("Claim does not exist");
+        }
+        if (!userValidation(userId,cid)){
+            throw new Exception(("You don't have access to this document"));
+        }
         Claim claim=getClaim(cid);
         Document doc =claim.getDocument(did);
         return doc.toString();
+    }
+
+    public boolean docExistance(int cid, int did) throws Exception {
+        if (!claimExistence(cid)){
+            throw new Exception ("The claim does not exist");
+        }
+        Claim claim=getClaim(cid);
+        return claim.containsDoc(did);
     }
 
     //Returns the size of the claim data store

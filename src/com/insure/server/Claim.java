@@ -57,6 +57,10 @@ public class Claim {
         return documents.get(i);
     }
 
+    public boolean containsDoc(int did){
+        return documents.containsKey(did);
+    }
+
     //Returns the claim identifier
     public int getUuid(){
         return uuid;
