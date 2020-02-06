@@ -5,16 +5,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Claim {
 
+    //Claim unique identifier
     private final int uuid;
 
     public int getDid() {
         return did.intValue();
     }
 
+    //Document identifier
     public AtomicInteger did;
+
+    //Claim description
     private String description;
 
-
+    //Data structure to store the documents of a claim
     private HashMap<Integer,Document> documents;
 
     public int getUserId() {
@@ -23,6 +27,7 @@ public class Claim {
 
     private int userId;
 
+    //Method that increments de document identifier
     public void increment(){
         did.incrementAndGet();
     }
@@ -36,24 +41,23 @@ public class Claim {
             documents = new HashMap<Integer, Document>();
     }
 
-
-    public void addDocument(String docName, String content, int userId,String assinatura) throws Exception {
-
-            Document document = new Document(this, docName, content, userId,assinatura);
+    //Add a document to the HashMap documents
+    public void addDocument(String docName, String content, int userId,String signature) throws Exception {
+            Document document = new Document(this, docName, content, userId,signature);
             documents.put(document.getDid(), document);
-
     }
-    //////////////////////////////////////////////////////////////////77777
 
-
+    //Returns the size of the HashMap documents
     public int size(){
         return documents.size();
     }
 
+    //Returns a specific document
     public Document getDocument(int i){
         return documents.get(i);
     }
 
+    //Returns the claim identifier
     public int getUuid(){
         return uuid;
     }
@@ -72,7 +76,7 @@ public class Claim {
                 '}';
     }
 
-
+    //Returns a string with the documents of a claim
     public String returnDocuments(){
         String doc="";
         for (int i=1;i<=this.size();i++){

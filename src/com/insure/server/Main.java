@@ -26,71 +26,39 @@ public class Main {
                     e.printStackTrace();
                 }
             }
-
-            for (int j = 1; j <= 40000; j++) {
-
-                Claim claim = db.getClaim(j);
-                try {
-                    db.addDocToClaim(j, "Teste", "Novo doc", 7,"jdjff");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
         }
-
     }
+
+
 
 
     public static void main(String args[]) throws Exception {
 
 
-        System.out.println("Project template - server");
-        ClaimDataStore insure = new ClaimDataStore();
-        Endpoint.publish("http://localhost:8090/docstorage", insure);
+        //System.out.println("Project template - server");
+        //ClaimDataStore insure = new ClaimDataStore();
+        //Endpoint.publish("http://localhost:8090/docstorage", insure);
 
-        //ClaimDataStore DB = new ClaimDataStore();
+        ClaimDataStore DB = new ClaimDataStore();
 
-        //Thread a = new MyThread(DB);
-        //Thread b = new MyThread(DB);
-        //Thread c= new MyThread(DB);
-        //Thread d=new MyThread(DB);
+        Thread a = new MyThread(DB);
+        Thread b = new MyThread(DB);
+        Thread c= new MyThread(DB);
+        Thread d=new MyThread(DB);
 
-        //a.start();
-        //b.start();
-        //c.start();
-        //d.start();
+        a.start();
+        b.start();
+        c.start();
+        d.start();
 
-        //a.join();
-        //b.join();
-        //c.join();
-        //d.join();
-
-//
-        // sum the elements in the map
-        //for (int i = 1; i <= DB.size(); i++) {
-        //  Claim el = DB.getClaim(i);
-        //System.out.println(el.toString());
-        //for (int j = 1; j <= el.size(); j++) {
-        //   Document doc = el.getDocument(j);
-        // System.out.println(doc.toString());
-        //}
-//
-        //   System.out.println(el.size());
-        // System.out.println(DB.size());
-//
-        // }
-        //}
+        a.join();
+        b.join();
+        c.join();
+        d.join();
 
 
-        //for
-        //System.out.println("done");
+        System.out.println(DB.size());
 
-        //for (int i = 1; i <= DB.size(); i++) {
-        //  String doc = DB.getDocumentsByClaim(i);
-        //System.out.println(doc);
-        //}
-        //}
     }
 }
 
