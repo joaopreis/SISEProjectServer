@@ -99,7 +99,7 @@ public class ClaimDataStore {
 
     //Validates the document digital signature
     public boolean signatureValidation(String content,String signature, int userId) throws Exception {
-        String pathpublickey="keys\\server\\user"+userId+"PublicKey";
+        String pathpublickey="keys"+System.getProperty("file.separator")+"server"+System.getProperty("file.separator")+"user"+userId+"PublicKey";
         Signature desencriptar=new Signature(signature);
         Signature encriptar=new Signature(content);
 
