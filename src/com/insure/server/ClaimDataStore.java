@@ -113,11 +113,14 @@ public class ClaimDataStore {
         return (EmployeeDataStore.EMPLOYEES.contains(userId) || userId==dataStore.get(claimId).getUserId());
     }
 
-    public String getDocumentsByClaim(int i) throws Exception {
-        if (!claimExistence(i)){
+    public String getDocumentsByClaim(int cid,int userId) throws Exception {
+        if (!claimExistence(cid)){
             throw new Exception ("Claim does not exist");
         }
-        Claim claim=dataStore.get(i);
+        if (!userValidation(userId,cid)){
+            throw new Exception("You don't have access to these documents");
+        }
+        Claim claim=dataStore.get(cid);
         String docs=claim.returnDocuments();
         return docs;
     }
@@ -179,9 +182,18 @@ public class ClaimDataStore {
     }
 
     //Updates the document (For testing reasons)
-    public void updateDocument(int cid, int did,String content){
-        Document doc=getDocumentbyId(cid,did);
-        doc.setContent(content);
+    public void updateDocument(int cid, int did,String content) throws Exception {
+        if(claimExistence(cid)){
+            if (docExistance(cid,did)){
+                Document doc=getDocumentbyId(cid,did);
+                doc.setContent(content);
+            }else{
+                throw new Exception("The document doesn't exist");
+            }
+        }else{
+            throw new Exception(("The claim doesn't exist"));
+        }
+
     }
 
     //Returns True when the user is a employee
