@@ -39,26 +39,6 @@ public class Main {
         ClaimDataStore insure = new ClaimDataStore();
         Endpoint.publish("http://localhost:8090/docstorage", insure);
 
-        ClaimDataStore DB = new ClaimDataStore();
-
-        Thread a = new MyThread(DB);
-        Thread b = new MyThread(DB);
-        Thread c= new MyThread(DB);
-        Thread d=new MyThread(DB);
-
-        a.start();
-        b.start();
-        c.start();
-        d.start();
-
-        a.join();
-        b.join();
-        c.join();
-        d.join();
-
-
-        System.out.println(DB.size());
-
     }
 }
 
